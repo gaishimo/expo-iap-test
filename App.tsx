@@ -71,10 +71,25 @@ export default function App() {
     }
   }, [])
 
-  const doPurchase = useCallback(async () => {
+  const doPurchase1 = useCallback(async () => {
     try {
       setPurchasing(true)
       await purchaseItemAsync(PRODUCT_ID)
+    } catch (err) {
+      console.log(err)
+      setPurchasing(false)
+    }
+  }, [])
+
+  const doPurchase2 = useCallback(async () => {
+    try {
+      setPurchasing(true)
+      await purchaseItemAsync(PRODUCT_ID, {
+        accountIdentifiers: {
+          obfuscatedAccountId: "dummyAccountId",
+          obfuscatedProfileId: "dummyProfileId",
+        }
+      })
     } catch (err) {
       console.log(err)
       setPurchasing(false)
@@ -90,10 +105,20 @@ export default function App() {
           {purchasing ? (
             <ActivityIndicator size="small" />
           ) : (
-            <Button
-              title={`Purchase Item (${productItem.price})`}
-              onPress={doPurchase}
-            />
+            <View style={{ alignItems: "center" }}>
+              <Button
+                title={`Purchase Item (1) (${productItem.price})`}
+                onPress={doPurchase1}
+              />
+              <View style={{ marginTop: 32 }}>
+                <Button
+                  title={`Purchase Item (2) (${productItem.price})`}
+                  onPress={doPurchase2}
+                />
+              </View>
+
+            </View>
+
           )}
         </View>
       )}
